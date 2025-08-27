@@ -1,0 +1,253 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Resume Generator</h1>
+        <form action="{{ url_for('index') }}" method="post">
+
+            <!-- Personal Info -->
+            <section>
+                <h2>Personal Information</h2>
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <input type="text" id="full_name" name="full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="linkedin">LinkedIn URL</label>
+                    <input type="url" id="linkedin" name="linkedin">
+                </div>
+                <div class="form-group">
+                    <label for="portfolio">Portfolio/Website URL</label>
+                    <input type="url" id="portfolio" name="portfolio">
+                </div>
+                <div class="form-group">
+                    <label for="address">Address (City, State, Country)</label>
+                    <input type="text" id="address" name="address">
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section>
+                <h2>Professional Summary</h2>
+                <div class="form-group">
+                    <textarea id="summary" name="summary" rows="5" required placeholder="A brief summary of your skills and experience."></textarea>
+                </div>
+            </section>
+
+            <!-- Work Experience -->
+            <section>
+                <h2>Work Experience</h2>
+                <div id="work-entries">
+                    <div class="multi-entry-group">
+                        <h3>Entry 1 <button type="button" class="remove-btn" onclick="removeEntry(this)">Remove</button></h3>
+                        <div class="form-group">
+                            <label for="job_title_1">Job Title</label>
+                            <input type="text" id="job_title_1" name="job_title_1">
+                        </div>
+                        <div class="form-group">
+                            <label for="company_1">Company</label>
+                            <input type="text" id="company_1" name="company_1">
+                        </div>
+                        <div class="form-group">
+                            <label for="job_location_1">Location</label>
+                            <input type="text" id="job_location_1" name="job_location_1">
+                        </div>
+                        <div class="form-group date-group">
+                            <label for="job_start_date_1">Start Date</label>
+                            <input type="text" id="job_start_date_1" name="job_start_date_1" placeholder="e.g., Month YYYY">
+                            <label for="job_end_date_1">End Date</label>
+                            <input type="text" id="job_end_date_1" name="job_end_date_1" placeholder="e.g., Present or Month YYYY">
+                        </div>
+                        <div class="form-group">
+                            <label for="responsibilities_1">Responsibilities (one per line)</label>
+                            <textarea id="responsibilities_1" name="responsibilities_1" rows="4" placeholder="Managed a team...&#10;Designed APIs..."></textarea>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="add-btn" onclick="addEntry('work')">Add Work Experience</button>
+            </section>
+
+            <!-- Education -->
+            <section>
+                <h2>Education</h2>
+                <div id="education-entries">
+                    <div class="multi-entry-group">
+                        <h3>Entry 1 <button type="button" class="remove-btn" onclick="removeEntry(this)">Remove</button></h3>
+                        <div class="form-group">
+                            <label for="degree_1">Degree</label>
+                            <input type="text" id="degree_1" name="degree_1" placeholder="e.g., B.Tech in CSE">
+                        </div>
+                        <div class="form-group">
+                            <label for="institution_1">Institution</label>
+                            <input type="text" id="institution_1" name="institution_1">
+                        </div>
+                        <div class="form-group">
+                            <label for="edu_location_1">Location</label>
+                            <input type="text" id="edu_location_1" name="edu_location_1">
+                        </div>
+                        <div class="form-group date-group">
+                            <label for="grad_date_1">Graduation Date</label>
+                            <input type="text" id="grad_date_1" name="grad_date_1" placeholder="e.g., June 2024">
+                        </div>
+                        <div class="form-group">
+                            <label for="gpa_1">GPA (Optional)</label>
+                            <input type="text" id="gpa_1" name="gpa_1">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="add-btn" onclick="addEntry('education')">Add Education</button>
+            </section>
+
+            <!-- Skills -->
+            <section>
+                <h2>Skills</h2>
+                <p>List skills separated by commas.</p>
+                <div class="form-group">
+                    <textarea id="skills" name="skills" rows="3" placeholder="Python, Flask, JavaScript, SQL, Git, Teamwork"></textarea>
+                </div>
+            </section>
+
+            <!-- Projects -->
+            <section>
+                <h2>Projects</h2>
+                <div id="projects-entries">
+                    <div class="multi-entry-group">
+                        <h3>Entry 1 <button type="button" class="remove-btn" onclick="removeEntry(this)">Remove</button></h3>
+                        <div class="form-group">
+                            <label for="project_title_1">Project Title</label>
+                            <input type="text" id="project_title_1" name="project_title_1">
+                        </div>
+                        <div class="form-group">
+                            <label for="project_description_1">Description</label>
+                            <textarea id="project_description_1" name="project_description_1" rows="4" placeholder="A brief description and your role."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="project_technologies_1">Technologies Used (comma-separated)</label>
+                            <input type="text" id="project_technologies_1" name="project_technologies_1" placeholder="e.g., Python, Flask, HTML, CSS">
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="add-btn" onclick="addEntry('projects')">Add Project</button>
+            </section>
+
+            <button type="submit" class="btn">Generate Resume</button>
+        </form>
+    </div>
+
+    <!-- Script -->
+    <script>
+        function addEntry(section) {
+            const container = document.getElementById(`${section}-entries`);
+            const entryCount = container.children.length + 1;
+
+            if (entryCount > 4) return; // limit 4 entries
+
+            let newEntryHtml = '';
+            if (section === 'work') {
+                newEntryHtml = `
+                    <h3>Entry ${entryCount} <button type="button" class="remove-btn" onclick="removeEntry(this)">Remove</button></h3>
+                    <div class="form-group">
+                        <label for="job_title_${entryCount}">Job Title</label>
+                        <input type="text" id="job_title_${entryCount}" name="job_title_${entryCount}">
+                    </div>
+                    <div class="form-group">
+                        <label for="company_${entryCount}">Company</label>
+                        <input type="text" id="company_${entryCount}" name="company_${entryCount}">
+                    </div>
+                    <div class="form-group">
+                        <label for="job_location_${entryCount}">Location</label>
+                        <input type="text" id="job_location_${entryCount}" name="job_location_${entryCount}">
+                    </div>
+                    <div class="form-group date-group">
+                        <label for="job_start_date_${entryCount}">Start Date</label>
+                        <input type="text" id="job_start_date_${entryCount}" name="job_start_date_${entryCount}" placeholder="e.g., Month YYYY">
+                        <label for="job_end_date_${entryCount}">End Date</label>
+                        <input type="text" id="job_end_date_${entryCount}" name="job_end_date_${entryCount}" placeholder="e.g., Present or Month YYYY">
+                    </div>
+                    <div class="form-group">
+                        <label for="responsibilities_${entryCount}">Responsibilities</label>
+                        <textarea id="responsibilities_${entryCount}" name="responsibilities_${entryCount}" rows="4"></textarea>
+                    </div>
+                `;
+            } else if (section === 'education') {
+                newEntryHtml = `
+                    <h3>Entry ${entryCount} <button type="button" class="remove-btn" onclick="removeEntry(this)">Remove</button></h3>
+                    <div class="form-group">
+                        <label for="degree_${entryCount}">Degree</label>
+                        <input type="text" id="degree_${entryCount}" name="degree_${entryCount}">
+                    </div>
+                    <div class="form-group">
+                        <label for="institution_${entryCount}">Institution</label>
+                        <input type="text" id="institution_${entryCount}" name="institution_${entryCount}">
+                    </div>
+                    <div class="form-group">
+                        <label for="edu_location_${entryCount}">Location</label>
+                        <input type="text" id="edu_location_${entryCount}" name="edu_location_${entryCount}">
+                    </div>
+                    <div class="form-group date-group">
+                        <label for="grad_date_${entryCount}">Graduation Date</label>
+                        <input type="text" id="grad_date_${entryCount}" name="grad_date_${entryCount}">
+                    </div>
+                    <div class="form-group">
+                        <label for="gpa_${entryCount}">GPA</label>
+                        <input type="text" id="gpa_${entryCount}" name="gpa_${entryCount}">
+                    </div>
+                `;
+            } else if (section === 'projects') {
+                newEntryHtml = `
+                    <h3>Entry ${entryCount} <button type="button" class="remove-btn" onclick="removeEntry(this)">Remove</button></h3>
+                    <div class="form-group">
+                        <label for="project_title_${entryCount}">Project Title</label>
+                        <input type="text" id="project_title_${entryCount}" name="project_title_${entryCount}">
+                    </div>
+                    <div class="form-group">
+                        <label for="project_description_${entryCount}">Description</label>
+                        <textarea id="project_description_${entryCount}" name="project_description_${entryCount}" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="project_technologies_${entryCount}">Technologies</label>
+                        <input type="text" id="project_technologies_${entryCount}" name="project_technologies_${entryCount}">
+                    </div>
+                `;
+            }
+
+            const newEntry = document.createElement('div');
+            newEntry.className = 'multi-entry-group';
+            newEntry.innerHTML = newEntryHtml;
+            container.appendChild(newEntry);
+        }
+
+        function removeEntry(button) {
+            const entry = button.closest('.multi-entry-group');
+            const container = entry.parentNode;
+            container.removeChild(entry);
+
+            // Renumber all entries
+            [...container.children].forEach((child, index) => {
+                const header = child.querySelector("h3");
+                if (header) {
+                    header.childNodes[0].nodeValue = `Entry ${index + 1} `;
+                }
+            });
+        }
+    </script>
+</body>
+</html>

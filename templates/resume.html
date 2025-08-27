@@ -1,0 +1,129 @@
+<!-- templates/resume.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data.personal.full_name }}'s Resume</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+            .resume-container {
+                box-shadow: none;
+                margin: 0 auto;
+                padding: 20px;
+                max-width: 8.5in;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="resume-container">
+        <!-- Personal Information -->
+        <header class="resume-header">
+            {% if data.personal.full_name %}
+            <h1>{{ data.personal.full_name }}</h1>
+            {% endif %}
+            <p class="contact-info">
+                {% if data.personal.address %} {{ data.personal.address }} | {% endif %}{% if data.personal.phone %} {{ data.personal.phone }} | {% endif %}{% if data.personal.email %} {{ data.personal.email }} {% endif %}
+            </p>
+            <p class="links">
+                {% if data.personal.linkedin %}
+                <a href="{{ data.personal.linkedin }}" target="_blank">LinkedIn</a>
+                {% endif %}
+                {% if data.personal.portfolio %}
+                <a href="{{ data.personal.portfolio }}" target="_blank">Portfolio</a>
+                {% endif %}
+            </p>
+        </header>
+
+        <!-- Professional Summary -->
+        {% if data.summary %}
+        <section class="resume-section summary-section">
+            <h2>Summary</h2>
+            <p>{{ data.summary }}</p>
+        </section>
+        {% endif %}
+
+        <!-- Work Experience -->
+        {% if data.experience %}
+        <section class="resume-section">
+            <h2>Work Experience</h2>
+            {% for job in data.experience %}
+            <div class="experience-entry">
+                <div class="entry-header">
+                    <h3 class="job-title">{{ job.job_title }}</h3>
+                    <p class="company-name">{{ job.company }}</p>
+                </div>
+                <div class="entry-meta">
+                    <span class="location">{{ job.location }}</span>
+                    <span class="dates">{{ job.start_date }} - {{ job.end_date }}</span>
+                </div>
+                <ul>
+                    {% for responsibility in job.responsibilities %}
+                    {% if responsibility.strip() %}
+                    <li>{{ responsibility }}</li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        <!-- Education -->
+        {% if data.education %}
+        <section class="resume-section">
+            <h2>Education</h2>
+            {% for edu in data.education %}
+            <div class="education-entry">
+                <div class="entry-header">
+                    <h3 class="degree">{{ edu.degree }}</h3>
+                    <p class="institution">{{ edu.institution }}</p>
+                </div>
+                <div class="entry-meta">
+                    <span class="location">{{ edu.location }}</span>
+                    <span class="dates">{{ edu.grad_date }}</span>
+                </div>
+                {% if edu.gpa %}
+                <p class="gpa">GPA: {{ edu.gpa }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        <!-- Skills -->
+        {% if data.skills %}
+        <section class="resume-section">
+            <h2>Skills</h2>
+            <p class="skills-list">{{ data.skills | join(', ') }}</p>
+        </section>
+        {% endif %}
+
+        <!-- Projects -->
+        {% if data.projects %}
+        <section class="resume-section">
+            <h2>Projects</h2>
+            {% for project in data.projects %}
+            <div class="project-entry">
+                <h3 class="project-title">{{ project.title }}</h3>
+                <p class="project-description">{{ project.description }}</p>
+                {% if project.technologies %}
+                <p class="project-tech">Technologies: {{ project.technologies | join(', ') }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+    </div>
+</body>
+</html>
